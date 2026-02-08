@@ -1,216 +1,255 @@
-# Online Auction System
+# BidBurst
 
-A full-featured online auction platform built with Django that allows users to list items for auction, place bids, and manage their auctions in real-time.
+**BidBurst** is an online auction platform built with Django. It is designed to let users list items for auction, place bids, and manage listings through a simple, secure web application.
 
-## 🚀 Features
+---
 
-- **User Authentication**: Secure registration and login system
-- **Auction Listings**: Create and manage auction listings with images
-- **Real-time Bidding**: Place bids on active auctions
-- **Watchlist**: Save interesting auctions to your watchlist
-- **Categories**: Browse auctions by categories
-- **Search & Filters**: Find specific items with advanced search
-- **Admin Dashboard**: Comprehensive admin interface for management
-- **Bid Notifications**: Get notified when you're outbid
-- **Auction Closing**: Automatic handling of auction end times
-- **User Profiles**: Manage your auctions and bidding history
+## Table of Contents
 
-## 🛠 Tech Stack
+- [About the Project](#about-the-project)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Setup & Installation](#setup--installation)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
 
-### Backend
-- **Python 3.8+**: Core programming language
-- **Django 4.2**: High-level Python web framework
-- **Django REST Framework**: For building RESTful APIs
-- **PostgreSQL**: Robust, production-ready database
-- **Celery**: Asynchronous task queue for background tasks
-- **Redis**: Caching and message broker
+---
 
-### Frontend
-- **HTML5, CSS3, JavaScript**: Core web technologies
-- **Bootstrap 5**: Responsive frontend framework
-- **jQuery**: For DOM manipulation and AJAX
-- **WebSockets**: For real-time updates (using Django Channels)
+## About the Project
 
-### DevOps
-- **Docker**: Containerization
-- **Gunicorn**: Production WSGI server
-- **Nginx**: Web server and reverse proxy
-- **Git**: Version control
+BidBurst provides a full-featured auction experience:
 
-## 📦 Prerequisites
+- **User accounts** — Registration and authentication (Django built-in)
+- **Auction listings** — Create and manage items for auction
+- **Bidding** — Place and track bids on active auctions
+- **Admin** — Django admin for managing users, listings, and bids
+- **Database** — SQLite by default for development; easily switched to PostgreSQL for production
 
-- Python 3.8 or higher
-- PostgreSQL 12+
-- Redis
-- pip (Python package manager)
-- Git
+The project uses Django’s **MVT (Model–View–Template)** architecture and is structured for clarity and future extension (e.g. REST API, real-time updates, background tasks).
 
-## 🚀 Installation
+---
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/online-auction-system.git
-   cd online-auction-system
-   ```
+## Tech Stack
 
-2. **Create and activate a virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+| Layer        | Technology | Purpose |
+|-------------|------------|--------|
+| **Language** | Python 3.10+ | Runtime and application logic |
+| **Framework** | Django 5.2 | Web framework, ORM, auth, admin |
+| **Database** | SQLite (default) | Development and lightweight deployment |
+| **Templates** | Django templates | Server-rendered HTML |
+| **Static** | Django staticfiles | CSS, JavaScript, images |
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+**Why Django?**
 
-4. **Set up environment variables**
-   Create a `.env` file in the project root:
-   ```
-   DEBUG=True
-   SECRET_KEY=your-secret-key-here
-   DATABASE_URL=postgres://user:password@localhost:5432/auction_db
-   REDIS_URL=redis://localhost:6379/0
-   ```
+- Built-in admin, auth, and ORM speed up development.
+- Strong security defaults (CSRF, XSS, SQL injection protection).
+- Clear project/app structure and large ecosystem.
 
-5. **Run migrations**
-   ```bash
-   python manage.py migrate
-   ```
+**Optional / future:** PostgreSQL, Redis, Celery, Django REST Framework, and Docker can be added as the project grows. The current codebase runs with Django and SQLite only.
 
-6. **Create a superuser**
-   ```bash
-   python manage.py createsuperuser
-   ```
+---
 
-7. **Run the development server**
-   ```bash
-   python manage.py runserver
-   ```
+## Prerequisites
 
-## 🏗 Project Structure
+Before setting up BidBurst, ensure you have:
+
+- **Python** 3.10 or higher  
+  Check: `python3 --version`
+- **pip** (Python package manager)  
+  Usually included with Python
+- **Git** (for cloning the repository)
+
+No database or Redis setup is required for the default SQLite configuration.
+
+---
+
+## Setup & Installation
+
+Follow these steps to get BidBurst running locally.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/BidBurst.git
+cd BidBurst
+```
+
+Replace `yourusername` with your GitHub username or your fork’s URL.
+
+### 2. Create a virtual environment
+
+Using the built-in `venv` module:
+
+```bash
+python3 -m venv venv
+```
+
+Activate it:
+
+- **macOS / Linux:**  
+  `source venv/bin/activate`
+- **Windows (Command Prompt):**  
+  `venv\Scripts\activate.bat`
+- **Windows (PowerShell):**  
+  `venv\Scripts\Activate.ps1`
+
+Your prompt should show `(venv)` when the environment is active.
+
+### 3. Install dependencies
+
+From the project root (with `venv` activated):
+
+```bash
+pip install -r requirements.txt
+```
+
+This installs Django and any other listed packages.
+
+### 4. Run database migrations
+
+Django uses migrations to create and update database tables:
+
+```bash
+python manage.py migrate
+```
+
+With the default settings, this creates a SQLite database at `db.sqlite3` in the project root.
+
+### 5. Create an admin user (optional)
+
+To access the Django admin site:
+
+```bash
+python manage.py createsuperuser
+```
+
+Follow the prompts to set an email/username and password.
+
+### 6. Run the development server
+
+```bash
+python manage.py runserver
+```
+
+Then open **http://127.0.0.1:8000/** in your browser.
+
+- **Admin:** http://127.0.0.1:8000/admin/ (after creating a superuser)
+
+---
+
+## Project Structure
 
 ```
-auction_system/
-├── auction/                  # Main project directory
-│   ├── settings/             # Project settings
-│   ├── urls.py               # Main URL configuration
-│   └── wsgi.py               # WSGI config
-├── auctions/                 # Auctions app
-│   ├── migrations/           # Database migrations
-│   ├── models.py             # Database models
-│   ├── views.py              # View functions/classes
-│   ├── templates/            # HTML templates
-│   └── tests.py              # Test cases
-├── users/                    # Users app
-├── static/                   # Static files (CSS, JS, images)
-│   ├── css/
-│   ├── js/
-│   └── images/
-├── media/                    # User-uploaded files
+BidBurst/
+├── Auction/                 # Django project package
+│   ├── __init__.py
+│   ├── asgi.py              # ASGI entry for async servers
+│   ├── settings.py          # Project settings
+│   ├── urls.py              # Root URL configuration
+│   └── wsgi.py              # WSGI entry for deployment
+├── bidburst/                # Main application (auctions & bidding)
+│   ├── __init__.py
+│   ├── admin.py             # Admin site registration
+│   ├── apps.py              # App configuration
+│   ├── models.py            # Database models
+│   ├── views.py             # View logic
+│   ├── tests.py             # Tests
+│   └── migrations/          # Database migrations
 ├── manage.py                # Django management script
-└── requirements.txt         # Project dependencies
+├── requirements.txt         # Python dependencies
+└── README.md                # This file
 ```
 
-## 🔧 Configuration
+- **Auction** — Project-wide settings and URL routing.
+- **bidburst** — Core app for auction listings, bids, and related logic.
+- **manage.py** — Used for `runserver`, `migrate`, `createsuperuser`, `test`, etc.
 
-### Environment Variables
+---
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| DEBUG | Enable debug mode | False |
-| SECRET_KEY | Django secret key | (generated) |
-| DATABASE_URL | Database connection URL | sqlite:///db.sqlite3 |
-| REDIS_URL | Redis connection URL | redis://localhost:6379/0 |
-| EMAIL_BACKEND | Email backend | console |
-| ALLOWED_HOSTS | Allowed hostnames | ['*'] |
+## Configuration
 
-## 🧪 Testing
+### Environment and secret key
 
-Run the test suite:
+For production, do **not** use the default `SECRET_KEY` in `Auction/settings.py`. Either:
+
+- Set a strong `SECRET_KEY` in environment variables and read it in `settings.py`, or  
+- Use a `.env` file with a package like `django-environ` and read from there.
+
+### Database
+
+The default configuration uses **SQLite** (`Auction/settings.py`):
+
+```python
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+```
+
+To use **PostgreSQL**, install `psycopg2-binary`, add it to `requirements.txt`, and switch `DATABASES` in `settings.py` to your PostgreSQL connection settings.
+
+### Allowed hosts
+
+For production, set `ALLOWED_HOSTS` in `settings.py` to your domain(s), e.g.:
+
+```python
+ALLOWED_HOSTS = ["yourdomain.com", "www.yourdomain.com"]
+```
+
+---
+
+## Running the Application
+
+| Command | Description |
+|--------|-------------|
+| `python manage.py runserver` | Start development server (default: http://127.0.0.1:8000/) |
+| `python manage.py runserver 0.0.0.0:8000` | Allow access from other devices on your network |
+| `python manage.py migrate` | Apply pending migrations |
+| `python manage.py createsuperuser` | Create an admin user |
+| `python manage.py test` | Run the test suite |
+
+---
+
+## Testing
+
+Run the default Django test runner:
+
 ```bash
 python manage.py test
 ```
 
-## 🐳 Docker Setup
-
-1. Build the containers:
-   ```bash
-   docker-compose build
-   ```
-
-2. Run the application:
-   ```bash
-   docker-compose up
-   ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📧 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - your.email@example.com
-
-Project Link: [https://github.com/yourusername/online-auction-system](https://github.com/yourusername/online-auction-system)
-
-## 🙏 Acknowledgments
-
-- [Django Documentation](https://docs.djangoproject.com/)
-- [Django REST Framework](https://www.django-rest-framework.org/)
-- [Bootstrap](https://getbootstrap.com/)
-- [Font Awesome](https://fontawesome.com/)
-- [GeeksforGeeks](https://www.geeksforgeeks.org/)
-
-## 🔍 Why This Tech Stack?
-
-### Django
-- **Batteries Included**: Comes with built-in features like authentication, admin interface, ORM, etc.
-- **Security**: Built-in protection against common web vulnerabilities
-- **Scalability**: Handles high traffic and can be scaled horizontally
-- **Community**: Large community and extensive third-party packages
-
-### PostgreSQL
-- **Reliability**: ACID compliance ensures data integrity
-- **Performance**: Handles complex queries efficiently
-- **JSON Support**: Store and query JSON data
-- **Full-text Search**: Built-in support for search functionality
-
-### Redis & Celery
-- **Performance**: Handles background tasks without blocking the main application
-- **Scalability**: Distributes tasks across multiple workers
-- **Real-time Updates**: Enables features like live bidding
-
-### Docker
-- **Consistency**: Same environment across development, testing, and production
-- **Isolation**: Dependencies are containerized
-- **Deployment**: Easy to deploy and scale
-
-## 📈 Future Improvements
-
-- [ ] Implement payment gateway integration
-- [ ] Add user verification system
-- [ ] Implement a recommendation system
-- [ ] Add more advanced search filters
-- [ ] Implement a rating and review system
-- [ ] Add social media authentication
-- [ ] Implement a mobile app using React Native
-
-## 📝 Notes
-
-- For development, you can use the built-in SQLite database
-- Make sure to set up proper email settings for production
-- Always keep your dependencies updated
-- Follow security best practices when handling user data
+Add tests in `bidburst/tests.py` (or new test modules under `bidburst/`) to cover models, views, and APIs as you build them.
 
 ---
 
-Made with ❤️ by [Your Name]
+## Contributing
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/your-feature-name`.
+3. Commit your changes: `git commit -m 'Add some feature'`.
+4. Push to the branch: `git push origin feature/your-feature-name`.
+5. Open a Pull Request against the main repository.
+
+---
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgments
+
+- [Django Documentation](https://docs.djangoproject.com/)
+- [Django Admin](https://docs.djangoproject.com/en/stable/ref/contrib/admin/)
+- [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/)
+
+---
+
+**BidBurst** — *Auction platform built with Django.*
